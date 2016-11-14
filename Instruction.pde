@@ -11,10 +11,10 @@ class Instruction{
   }
   
   void display(){
-    fill(200);
+    fill(200, 200, 200, 50);
     stroke(0);
     
-    rect(50, 10, config.screenWidth - 50 * 2, config.screenHeight - 10 * 2);
+    rect(50, 50, config.screenWidth - 50 * 2, config.screenHeight - 50 * 2);
     
     fill(0, 255, 100);
     stroke(0);

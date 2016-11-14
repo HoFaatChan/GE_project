@@ -23,7 +23,7 @@ class Main{
     textAlign(CENTER); 
     fill(0, 255, 100);
     stroke(0);
-    text("Green Building" ,config.titleTextX, config.titleTextY);
+    text("Construction Safty" ,config.titleTextX, config.titleTextY);
     
     createStartButton();
     createInstructionButton();
