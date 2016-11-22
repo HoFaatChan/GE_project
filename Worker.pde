@@ -28,7 +28,7 @@ class Worker{
     if(x < 0) {
       x = 0;
     }else if(x > config.screenWidth - config.workerSize / 2) {
-      x = config.screenWidth - config.workerSize / 2
+      x = config.screenWidth - config.workerSize / 2;
     }
     
     worker = loadImage(config.workerImage);

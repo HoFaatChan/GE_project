@@ -1,8 +1,9 @@
 class Config{
-  String backgroundImage = "data\\background  2.jpg";
-  String workerImage = "data\\worker (2).png";
-  String[] recycleObjectImage = {"data\\bottle3.png", "data\\can3.png", "Newspaper3.png"};
-  String[] fallObjectImage = {"data\\brick2.png", "data\\steel2 .png"};
+  String backgroundImage = "background  2.jpg";
+  String workerImage = "worker (2).png";
+  String[] recycleObjectImage = {"bottle3.png", "can3.png", "Newspaper3.png"};
+  String[] recycleBinImage = {"brown4.png", "Yellow03.png", "blue4.png"};
+  String[] fallObjectImage = {"brick2.png", "steel2 .png"};
   
   float screenWidth = 800;
   float screenHeight = 600;
@@ -27,11 +28,19 @@ class Config{
   int gameInstructionButtonWidth = 80;
   int gameInstructionButtonHeight = 20;
   
+  int gameBarHeight = 40;
+  
   int workerSize = 100;
   int workerSpeed = 400;
+  
+  int[][] recycleBinLocation = {{100, 350},{400, 200},{600, 300}};
+  int[][] recycleBinSize = {{80, 127},{100, 83},{100, 86}};
   
   int recycleObjectAnimationTime = 1000;
   
   int fallObjectCreateInterval = 500;
   int fallObjectSpeed = 200;
+  
+  int scoreRecycleBinCorrect = 50;
+  int scoreRecycleBinWrong = -50;
 }

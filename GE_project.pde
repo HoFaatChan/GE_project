@@ -12,18 +12,18 @@ Boolean gameStart;
 Boolean displayInstruction;
 
 void setup() {
- size(800, 600);
+  size(800, 600);
  
- main = new Main();
- game = new Game();
- instruction = new Instruction();
+  main = new Main();
+  game = new Game();
+  instruction = new Instruction();
  
- startTime = 0;
- stopTime = 0;
+  startTime = 0;
+  stopTime = 0;
    
  
- gameStart = false;
- displayInstruction = false;
+  gameStart = false;
+  displayInstruction = false;
  
 }
 
@@ -45,18 +45,18 @@ void mouseReleased() {
   gameTime = millis() - startTime;
   
   if(displayInstruction){
-   if(instruction.mouseOverStartButton){
-     displayInstruction = false;
+    if(instruction.mouseOverStartButton){
+      displayInstruction = false;
      
-     gameStart = true;
+      gameStart = true;
      
-     instruction.reset();
+      instruction.reset();
      
-     if(startTime == 0) {
-       startTime = millis();
-     } else {
-       startTime = startTime + millis() - stopTime;
-     }
+      if(startTime == 0) {
+        startTime = millis();
+      }else {
+        startTime = startTime + millis() - stopTime;
+      }
    }
   }else if(!gameStart) {
     if(main.mouseOverStartButton) {

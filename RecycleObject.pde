@@ -5,12 +5,13 @@ class RecycleObject{
   float x;
   float y;
   float currentWidth;
-  float currentheight;
+  float currentHeight;
   
   float startX;
   float startY;
   float targetX;
   float targetY;
+  float parabolaAngle;
   float startAnimationTime;
   
   Boolean isHit;
@@ -30,26 +31,23 @@ class RecycleObject{
     
     objectImage = loadImage(config.recycleObjectImage[objectType]);
     currentWidth = objectImage.width;
-    currentheight = objectImage.height;
+    currentHeight = objectImage.height;
   }
   
   void display(float workerX,int hitCount, float gameTime){
     if(startAnimationTime != 0){
-      if(gameTime - startAnimationTime >= config.recycleObjectAnimationTime) {
-        x = targetX;
-        y = targetY;
-        
+      if(gameTime - startAnimationTime >= config.recycleObjectAnimationTime + 250) {      
         isAnimationFinish = true;
       }else {
-        x = startX + (targetX - startX) * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime;
-        y = startY + (targetY - startY) * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime;
+        x = startX + (targetX - startX) * (gameTime - startAnimationTime) / (config.recycleObjectAnimationTime + 250);
+        y = startY - (startY - config.gameBarHeight) * sin(parabolaAngle * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime);
       }
     }else if(isHit) {
       x = workerX + config.workerSize * 3 / 4 + hitCount * 50;
-      y = 525;
+      y = config.screenHeight - config.workerSize / 2 - currentHeight / 2;
     }
     
-    image(objectImage, x, y, currentWidth, currentheight);
+    image(objectImage, x, y, currentWidth, currentHeight);
   }
   
   Boolean hitTest(float workerX){
@@ -59,7 +57,7 @@ class RecycleObject{
       isHit = true;
       
       currentWidth = currentWidth / 2;
-      currentheight = currentheight / 2;
+      currentHeight = currentHeight / 2;
       
       return true;
    }
@@ -70,8 +68,12 @@ class RecycleObject{
   void setThrowAnimation(float targetX, float targetY, float gameTime){
     startX = x;
     startY = y;
-    this.targetX = targetX;
-    this.targetY = targetY;
+    this.targetX = targetX - currentWidth / 2;
+    this.targetY = targetY + currentHeight / 2;
+    
+    if(targetY > config.screenHeight - config.workerSize) targetY = config.screenHeight - config.workerSize / 2 - currentHeight / 2;
+    
+    parabolaAngle = asin((targetY - config.gameBarHeight) / (startY - config.gameBarHeight)) + PI / 2;
     
     isHit = false;
     

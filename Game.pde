@@ -4,6 +4,7 @@ class Game{
    Worker worker;
    
    Boolean mouseOverIntsuctionButton;
+   ArrayList<RecycleBin> recycleBinArray;
    ArrayList<RecycleObject> recycleObjectArray;
    ArrayList<RecycleObject> holdingObjectArray;
    ArrayList<FallObject> fallObjectArray;
@@ -28,7 +29,9 @@ class Game{
      
      fallObjectArray = new ArrayList<FallObject>();
      
-     resetRecycleObjectArray();
+     createRecycleBin();
+     
+     resetRecycleObject();
    }
    
    void run(float gameTime){
@@ -41,6 +44,8 @@ class Game{
      backgroundImage = loadImage(config.backgroundImage);
      float backgroundDisplacementX = 0 - (mouseX / config.screenWidth) * 100;
      image(backgroundImage, backgroundDisplacementX, 0, 900, 900);
+     
+     displayRecycleBin();
      
      workerControl(gameTime);
      
@@ -65,13 +70,21 @@ class Game{
    }
    
    
-   
-   void resetRecycleObjectArray(){
-     recycleObjectArray = new ArrayList<RecycleObject>();
-     holdingObjectArray = new ArrayList<RecycleObject>();
+   void createRecycleBin() {
+     recycleBinArray = new ArrayList<RecycleBin>();
      
-     for(int i=0;i<config.recycleObjectImage.length;i++){
-       recycleObjectArray.add(new RecycleObject(i));
+     for(int i=0;i<config.recycleBinImage.length;i++){
+       recycleBinArray.add(new RecycleBin(i));
+     }
+   }
+   
+   void displayRecycleBin() {
+     RecycleBin recycleBin;
+     
+     for(int i=0;i<recycleBinArray.size();i++){
+       recycleBin = recycleBinArray.get(i);
+       
+       recycleBin.display();
      }
    }
    
@@ -89,10 +102,19 @@ class Game{
      worker.move(gameTime);
    }
    
+   void resetRecycleObject(){
+     recycleObjectArray = new ArrayList<RecycleObject>();
+     holdingObjectArray = new ArrayList<RecycleObject>();
+     
+     for(int i=0;i<config.recycleObjectImage.length;i++){
+       recycleObjectArray.add(new RecycleObject(i));
+     }
+   }
+   
    void recycleObjectControl(float gameTime) {
      RecycleObject currentObject;
      
-     if(recycleObjectArray.size() == 0 && holdingObjectArray.size() == 0) resetRecycleObjectArray();
+     if(recycleObjectArray.size() == 0 && holdingObjectArray.size() == 0) resetRecycleObject();
      
      for(int i=0; i < recycleObjectArray.size(); i++) {
        currentObject = recycleObjectArray.get(i);
@@ -151,6 +173,7 @@ class Game{
    
    void checkThrowLocation(float targetX, float targetY, float gameTime){
      RecycleObject currentObject;
+     RecycleBin recycleBin;
      
      if(holdingObjectArray.size() > 0) {
        currentObject = holdingObjectArray.get(0);
@@ -160,13 +183,25 @@ class Game{
        holdingObjectArray.remove(0);
        
        recycleObjectArray.add(currentObject);
+       
+       for(int i=0; i<recycleBinArray.size(); i++) {
+         recycleBin = recycleBinArray.get(i);
+         
+         if(recycleBin.hitText(targetX, targetY)) {
+           if(currentObject.objectType == recycleBin.objectType) {
+             score += config.scoreRecycleBinCorrect; 
+           }else {
+             score += config.scoreRecycleBinWrong;
+           }
+         }
+       }
      }
    }
    
    void createGameBar(){
      fill(200);
      stroke(0);
-     rect(-1, 0, config.screenWidth + 2, 40);
+     rect(-1, 0, config.screenWidth + 2, config.gameBarHeight);
      
     if(mouseX > config.gameInstructionButtonX && mouseX < config.gameInstructionButtonX + config.gameInstructionButtonWidth){
       if(mouseY > config.gameInstructionButtonY && mouseY < config.gameInstructionButtonY + config.gameInstructionButtonHeight){
