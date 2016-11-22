@@ -30,7 +30,7 @@ class Config{
   int workerSize = 100;
   int workerSpeed = 400;
   
-  int recycleObjectAnimationTime = 2000;
+  int recycleObjectAnimationTime = 1000;
   
   int fallObjectCreateInterval = 500;
   int fallObjectSpeed = 200;

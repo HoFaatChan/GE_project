@@ -45,17 +45,17 @@ class RecycleObject{
         y = startY + (targetY - startY) * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime;
       }
     }else if(isHit) {
-      x = workerX + config.workerSize * 3 / 4 + (hitCount - 1) * 50;
+      x = workerX + config.workerSize * 3 / 4 + hitCount * 50;
       y = 525;
     }
     
     image(objectImage, x, y, currentWidth, currentheight);
   }
   
-  Boolean hitTest(){
+  Boolean hitTest(float workerX){
     if(startAnimationTime != 0) return false;
     
-   if(mouseX > x && mouseX < x + config.workerSize){
+   if(x > workerX - config.workerSize / 2 && x < workerX + config.workerSize / 2){
       isHit = true;
       
       currentWidth = currentWidth / 2;

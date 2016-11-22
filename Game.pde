@@ -5,6 +5,7 @@ class Game{
    
    Boolean mouseOverIntsuctionButton;
    ArrayList<RecycleObject> recycleObjectArray;
+   ArrayList<RecycleObject> holdingObjectArray;
    ArrayList<FallObject> fallObjectArray;
    
    int recycleObjectHitCount;
@@ -31,7 +32,6 @@ class Game{
    }
    
    void run(float gameTime){
-     RecycleObject currentObject;
      FallObject currentFallObject;
      PImage backgroundImage;
      
@@ -42,22 +42,10 @@ class Game{
      float backgroundDisplacementX = 0 - (mouseX / config.screenWidth) * 100;
      image(backgroundImage, backgroundDisplacementX, 0, 900, 900);
      
-     worker.move(gameTime);
-     if(recycleObjectArray.size() == 0) resetRecycleObjectArray();
+     workerControl(gameTime);
      
-     for(int i=0; i < recycleObjectArray.size(); i++) {
-       currentObject = recycleObjectArray.get(i);
-       
-       if(!currentObject.isHit) {
-         if(currentObject.hitTest()){
-           recycleObjectHitCount++;
-         }
-       }else{
-         recycleObjectHitCount++;
-       }
-       
-       currentObject.display(worker.x, recycleObjectHitCount, gameTime);
-     }
+     recycleObjectControl(gameTime);
+     
      
      if(gameTime - lastFallObjectCreateTime > config.fallObjectCreateInterval) {
        lastFallObjectCreateTime = gameTime;
@@ -80,12 +68,53 @@ class Game{
    
    void resetRecycleObjectArray(){
      recycleObjectArray = new ArrayList<RecycleObject>();
+     holdingObjectArray = new ArrayList<RecycleObject>();
      
      for(int i=0;i<config.recycleObjectImage.length;i++){
        recycleObjectArray.add(new RecycleObject(i));
      }
+   }
+   
+   void workerControl(float gameTime) {
+     if(keyPressed) {
+       if (key == 'a' || key == 'A') {
+         worker.setDirection('a');
+       } else if(key == 'd' || key == 'D') {
+         worker.setDirection('d');
+       }
+     } else {
+       worker.setDirection('s');
+     }
      
-     recycleObjectHitCount = 0;
+     worker.move(gameTime);
+   }
+   
+   void recycleObjectControl(float gameTime) {
+     RecycleObject currentObject;
+     
+     if(recycleObjectArray.size() == 0 && holdingObjectArray.size() == 0) resetRecycleObjectArray();
+     
+     for(int i=0; i < recycleObjectArray.size(); i++) {
+       currentObject = recycleObjectArray.get(i);
+       
+       if(!currentObject.isHit) {
+         if(currentObject.hitTest(worker.x)){
+           holdingObjectArray.add(currentObject);
+           
+           recycleObjectArray.remove(i);
+           
+           i--;
+         }
+       }
+       
+       currentObject.display(worker.x, i, gameTime);
+     }
+     
+     for(int i=0; i < holdingObjectArray.size(); i++) {
+       currentObject = holdingObjectArray.get(i);
+       
+       currentObject.display(worker.x, i, gameTime);
+     }
    }
    
    void createBrickAndSteel(float gameTime){
@@ -123,16 +152,15 @@ class Game{
    void checkThrowLocation(float targetX, float targetY, float gameTime){
      RecycleObject currentObject;
      
-     for(int i=0; i < recycleObjectArray.size(); i++) {
-       currentObject = recycleObjectArray.get(i);
+     if(holdingObjectArray.size() > 0) {
+       currentObject = holdingObjectArray.get(0);
        
-       if(currentObject.isHit) {
-         currentObject.setThrowAnimation(targetX, targetY, gameTime);
-         
-         break;
-       }
-     }
+       currentObject.setThrowAnimation(targetX, targetY, gameTime);
      
+       holdingObjectArray.remove(0);
+       
+       recycleObjectArray.add(currentObject);
+     }
    }
    
    void createGameBar(){
