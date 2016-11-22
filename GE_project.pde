@@ -52,22 +52,30 @@ void mouseReleased() {
      
       instruction.reset();
      
-      if(startTime == 0) {
-        startTime = millis();
-      }else {
-        startTime = startTime + millis() - stopTime;
-      }
+      startTime = startTime + millis() - stopTime;
    }
   }else if(!gameStart) {
     if(main.mouseOverStartButton) {
-     gameStart = true; 
-     
-     startTime = millis();
+     gameStart = true;
     }else if(main.mouseOverIntsuctionButton){
       displayInstruction = true;
     }
   }else if(gameStart){
-    if(game.mouseOverIntsuctionButton){
+    if(game.displayDifficulty) {
+      if(game.mouseOverEasyButton){
+        game.displayDifficulty = false;
+        
+        game.gameDifficulty = 0;
+        
+        startTime = millis();
+      }else if(game.mouseOverHardButton) {
+        game.displayDifficulty = false;
+        
+        game.gameDifficulty = 1;
+        
+        startTime = millis();
+      }
+    }else if(game.mouseOverIntsuctionButton){
       displayInstruction = true;
       
       stopTime = millis();

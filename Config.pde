@@ -28,19 +28,30 @@ class Config{
   int gameInstructionButtonWidth = 80;
   int gameInstructionButtonHeight = 20;
   
+  int easyButtonX = 300;
+  int easyButtonY = 150;
+  int easyButtonWidth = 200;
+  int easyButtonHeight = 70;
+  
+  int hardButtonX = 300;
+  int hardButtonY = 300;
+  int hardButtonWidth = 200;
+  int hardButtonHeight = 70;
+  
   int gameBarHeight = 40;
   
   int workerSize = 100;
   int workerSpeed = 400;
   
-  int[][] recycleBinLocation = {{100, 350},{400, 200},{600, 300}};
-  int[][] recycleBinSize = {{80, 127},{100, 83},{100, 86}};
+  int[][] recycleBinLocation = {{100, 350},{400, 200},{600, 300}};//{{x,y}, ...}
+  int[][] recycleBinSize = {{80, 127},{100, 83},{100, 86}};//{{width,height}, ...}
   
   int recycleObjectAnimationTime = 1000;
   
-  int fallObjectCreateInterval = 500;
-  int fallObjectSpeed = 200;
+  int[] fallObjectCreateInterval = {900, 500};
+  float[] fallObjectSpeed = {200, 400};
   
   int scoreRecycleBinCorrect = 50;
-  int scoreRecycleBinWrong = -50;
+  int scoreRecycleBinWrong = -100;
+  int scoreHitFallObject = -10;
 }

@@ -11,7 +11,7 @@ class Instruction{
   }
   
   void display(){
-    fill(200, 200, 200, 50);
+    fill(200, 200, 200);
     stroke(0);
     
     rect(50, 50, config.screenWidth - 50 * 2, config.screenHeight - 50 * 2);

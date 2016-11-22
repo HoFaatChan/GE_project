@@ -36,11 +36,11 @@ class RecycleObject{
   
   void display(float workerX,int hitCount, float gameTime){
     if(startAnimationTime != 0){
-      if(gameTime - startAnimationTime >= config.recycleObjectAnimationTime + 250) {      
+      if(gameTime - startAnimationTime >= config.recycleObjectAnimationTime + 200) {      
         isAnimationFinish = true;
       }else {
-        x = startX + (targetX - startX) * (gameTime - startAnimationTime) / (config.recycleObjectAnimationTime + 250);
-        y = startY - (startY - config.gameBarHeight) * sin(parabolaAngle * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime);
+        x = startX + (targetX - startX) * (gameTime - startAnimationTime) / (config.recycleObjectAnimationTime + 200);
+        y = startY - (startY - config.gameBarHeight) * sin(parabolaAngle * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime) ;
       }
     }else if(isHit) {
       x = workerX + config.workerSize * 3 / 4 + hitCount * 50;
@@ -71,7 +71,7 @@ class RecycleObject{
     this.targetX = targetX - currentWidth / 2;
     this.targetY = targetY + currentHeight / 2;
     
-    if(targetY > config.screenHeight - config.workerSize) targetY = config.screenHeight - config.workerSize / 2 - currentHeight / 2;
+    if(targetY > config.screenHeight - config.workerSize) targetY = config.screenHeight - config.workerSize - currentHeight;
     
     parabolaAngle = asin((targetY - config.gameBarHeight) / (startY - config.gameBarHeight)) + PI / 2;
     

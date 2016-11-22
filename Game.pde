@@ -4,6 +4,10 @@ class Game{
    Worker worker;
    
    Boolean mouseOverIntsuctionButton;
+   Boolean mouseOverEasyButton;
+   Boolean mouseOverHardButton;
+   Boolean displayDifficulty;
+   
    ArrayList<RecycleBin> recycleBinArray;
    ArrayList<RecycleObject> recycleObjectArray;
    ArrayList<RecycleObject> holdingObjectArray;
@@ -14,6 +18,8 @@ class Game{
    
    int score;
    
+   int gameDifficulty;
+   
    PFont gameTextFont;
    
    Game() {
@@ -22,7 +28,11 @@ class Game{
      gameTextFont = createFont( "Arial", 32, true);
      
      mouseOverIntsuctionButton = false;
+     mouseOverEasyButton = false;
+     mouseOverHardButton = false;
+     displayDifficulty = true;
      
+     gameDifficulty = 0;
      recycleObjectHitCount = 0;
      lastFallObjectCreateTime = 0;
      score = 0;
@@ -35,13 +45,22 @@ class Game{
    }
    
    void run(float gameTime){
-     FallObject currentFallObject;
      PImage backgroundImage;
      
      recycleObjectHitCount = 0;
      
-     background(255);
      backgroundImage = loadImage(config.backgroundImage);
+     
+     if(displayDifficulty) {
+       image(backgroundImage, 0, 0, 900, 900);
+       
+       createGameBar();
+       
+       createLevelButton();
+       
+       return;
+     }
+     
      float backgroundDisplacementX = 0 - (mouseX / config.screenWidth) * 100;
      image(backgroundImage, backgroundDisplacementX, 0, 900, 900);
      
@@ -51,18 +70,7 @@ class Game{
      
      recycleObjectControl(gameTime);
      
-     
-     if(gameTime - lastFallObjectCreateTime > config.fallObjectCreateInterval) {
-       lastFallObjectCreateTime = gameTime;
-       
-       createBrickAndSteel(gameTime);
-     }
-     
-     for(int i=0; i < fallObjectArray.size(); i++) {
-       currentFallObject = fallObjectArray.get(i);
-       
-       currentFallObject.display(gameTime);
-     }
+     fallObjectControl(gameTime);
      
      clearFinishedObject();
 
@@ -139,12 +147,72 @@ class Game{
      }
    }
    
-   void createBrickAndSteel(float gameTime){
-     float angle;
+   void fallObjectControl(float gameTime) {
+     FallObject currentFallObject;
      
-     angle = gameTime % 5000 / 5000 * PI;
+     if(gameTime - lastFallObjectCreateTime > config.fallObjectCreateInterval[gameDifficulty]) {
+       lastFallObjectCreateTime = gameTime;
        
-     fallObjectArray.add(new FallObject(0, angle, gameTime));
+       createBrickAndSteel(gameTime);
+     }
+     
+     for(int i=0; i < fallObjectArray.size(); i++) {
+       currentFallObject = fallObjectArray.get(i);
+       
+       currentFallObject.display(gameTime);
+     }
+     
+     checkWorkerHitFallObject();
+   }
+   
+   void createBrickAndSteel(float gameTime){
+     int ObjectType;
+     float startX;
+     float startY;
+     
+     if(gameDifficulty == 0) {
+       ObjectType = floor(random(2));
+       
+       startX = random(config.screenWidth);
+       startY = 0;
+       
+       fallObjectArray.add(new FallObject(ObjectType, startX, startY, PI / 2, gameTime, config.fallObjectSpeed[gameDifficulty]));
+     }else if(gameDifficulty == 1) {
+       ObjectType = floor(random(2));
+       
+       startX = random(config.screenWidth);
+       startY = config.gameBarHeight;
+       
+       fallObjectArray.add(new FallObject(ObjectType, startX, startY, PI / 2, gameTime, config.fallObjectSpeed[gameDifficulty]));
+     }
+     //float angle;
+     
+     //angle = gameTime % 5000 / 5000 * PI;
+       
+     //fallObjectArray.add(new FallObject(0, angle, gameTime));
+   }
+   
+   void checkWorkerHitFallObject() {
+     FallObject currentFallObject;
+     
+     for(int i=0; i < fallObjectArray.size(); i++) {
+       currentFallObject = fallObjectArray.get(i);
+       
+       if(currentFallObject.y < config.screenHeight - config.workerSize) continue;
+       if(currentFallObject.isHit == true) continue;
+       
+       if(currentFallObject.y < config.screenHeight) {
+         if(currentFallObject.x + currentFallObject.objectWidth / 2 > worker.x && currentFallObject.x + currentFallObject.objectWidth / 2 < worker.x + config.workerSize) {
+           score += config.scoreHitFallObject;
+           
+           currentFallObject.isHit = true;
+         }else if(worker.x + config.workerSize / 2 > currentFallObject.x && worker.x + config.workerSize / 2 < currentFallObject.x + currentFallObject.objectWidth){
+           score += config.scoreHitFallObject;
+           
+           currentFallObject.isHit = true;
+         }
+       }
+     }
    }
    
    void clearFinishedObject(){
@@ -233,5 +301,52 @@ class Game{
     text("Score :", config.scoreTextX, config.scoreTextY);
     float wordWidth = textWidth("Score :" + score);
     text(score, config.scoreTextX + wordWidth + 5, config.scoreTextY);
+   }
+   
+   void createLevelButton() {
+     stroke(0);
+     if(mouseX > config.easyButtonX && mouseX < config.easyButtonX + config.easyButtonWidth){
+      if(mouseY > config.easyButtonY && mouseY < config.easyButtonY + config.easyButtonHeight){
+        fill(200);
+        rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight);
+        
+        mouseOverEasyButton = true;
+      }else {
+        fill(255);
+        rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight);
+        
+        mouseOverEasyButton = false;
+      }
+    } else {
+      fill(255);
+      rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight);
+      
+      mouseOverEasyButton = false;
+    }
+     
+     if(mouseX > config.hardButtonX && mouseX < config.hardButtonX + config.hardButtonWidth){
+      if(mouseY > config.hardButtonY && mouseY < config.hardButtonY + config.hardButtonHeight){
+        fill(200);
+        rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight);
+        
+        mouseOverHardButton = true;
+      }else {
+        fill(255);
+        rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight);
+        
+        mouseOverHardButton = false;
+      }
+    } else {
+      fill(255);
+      rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight);
+      
+      mouseOverHardButton = false;
+    }
+    
+    fill(0);
+    stroke(0);
+    textFont(gameTextFont,24);
+    text("EASY", config.easyButtonX + config.easyButtonWidth / 2, config.easyButtonY + config.hardButtonHeight / 2 + 10);
+    text("HARD", config.hardButtonX + config.hardButtonWidth / 2, config.hardButtonY + config.hardButtonHeight / 2 + 10);
    }
 }
