@@ -6,6 +6,8 @@ class Main{
    Boolean mouseOverIntsuctionButton;
    
    Config config = new Config();
+   
+   PImage backgroundImage;
     
   Main(){
     titleFont = createFont( "Arial", 32, true);
@@ -13,15 +15,16 @@ class Main{
     mouseOverStartButton = false;
     mouseOverIntsuctionButton = false;
     
+    backgroundImage = loadImage(config.mainBackgroundImage);
   }
   
 
   void display(){
-    background(225);
+    image(backgroundImage, 0, 0);
     
     textFont(titleFont,64); 
     textAlign(CENTER); 
-    fill(0, 255, 100);
+    fill(255, 50, 20);
     stroke(0);
     text("Construction Safty" ,config.titleTextX, config.titleTextY);
     
@@ -33,18 +36,18 @@ class Main{
     if(mouseX > config.startButtonX && mouseX < config.startButtonX + config.startButtonWidth){
       if(mouseY > config.startButtonY && mouseY < config.startButtonY + config.startButtonHeight){
         fill(200);
-        rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight);
+        rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight, 4);
         
         mouseOverStartButton = true;
       }else {
         fill(255);
-        rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight);
+        rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight, 4);
         
         mouseOverStartButton = false;
       }
     } else {
       fill(255);
-      rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight);
+      rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight, 4);
       
       mouseOverStartButton = false;
     }
@@ -61,18 +64,18 @@ class Main{
     if(mouseX > config.instructionButtonX && mouseX < config.instructionButtonX + config.instructionButtonWidth){
       if(mouseY > config.instructionButtonY && mouseY < config.instructionButtonY + config.instructionButtonHeight){
         fill(200);
-        rect(config.instructionButtonX, config.instructionButtonY, config.instructionButtonWidth, config.instructionButtonHeight);
+        rect(config.instructionButtonX, config.instructionButtonY, config.instructionButtonWidth, config.instructionButtonHeight, 4);
         
         mouseOverIntsuctionButton = true;
       }else {
         fill(255);
-        rect(config.instructionButtonX, config.instructionButtonY, config.instructionButtonWidth, config.instructionButtonHeight);
+        rect(config.instructionButtonX, config.instructionButtonY, config.instructionButtonWidth, config.instructionButtonHeight, 4);
         
         mouseOverIntsuctionButton = false;
       }
     } else {
       fill(255);
-      rect(config.instructionButtonX, config.instructionButtonY, config.instructionButtonWidth, config.instructionButtonHeight);
+      rect(config.instructionButtonX, config.instructionButtonY, config.instructionButtonWidth, config.instructionButtonHeight, 4);
       
       mouseOverIntsuctionButton = false;
     }

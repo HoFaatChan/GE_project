@@ -8,19 +8,20 @@ class Game{
    Boolean mouseOverHardButton;
    Boolean displayDifficulty;
    
-   ArrayList<RecycleBin> recycleBinArray;
-   ArrayList<RecycleObject> recycleObjectArray;
-   ArrayList<RecycleObject> holdingObjectArray;
-   ArrayList<FallObject> fallObjectArray;
+   private ArrayList<RecycleBin> recycleBinArray;
+   private ArrayList<RecycleObject> recycleObjectArray;
+   private ArrayList<RecycleObject> holdingObjectArray;
+   private ArrayList<FallObject> fallObjectArray;
    
-   int recycleObjectHitCount;
-   float lastFallObjectCreateTime;
+   private float lastFallObjectCreateTime;
    
-   int score;
+   private int score;
    
    int gameDifficulty;
    
    PFont gameTextFont;
+   PImage backgroundImage;
+   PImage gameBarImage;
    
    Game() {
      worker = new Worker();
@@ -33,10 +34,11 @@ class Game{
      displayDifficulty = true;
      
      gameDifficulty = 0;
-     recycleObjectHitCount = 0;
      lastFallObjectCreateTime = 0;
      score = 0;
      
+     backgroundImage = loadImage(config.gameBackgroundImage);
+     gameBarImage = loadImage(config.gameBarImage);
      fallObjectArray = new ArrayList<FallObject>();
      
      createRecycleBin();
@@ -45,24 +47,23 @@ class Game{
    }
    
    void run(float gameTime){
-     PImage backgroundImage;
-     
-     recycleObjectHitCount = 0;
-     
-     backgroundImage = loadImage(config.backgroundImage);
      
      if(displayDifficulty) {
-       image(backgroundImage, 0, 0, 900, 900);
+       image(backgroundImage, 0, config.gameBarHeight, 800, 630);
        
        createGameBar();
        
        createLevelButton();
        
        return;
+     }else if(checkGameOver()) {
+       createGameBar();
+       
+       displayGameOver();
+       
+       return;
      }
-     
-     float backgroundDisplacementX = 0 - (mouseX / config.screenWidth) * 100;
-     image(backgroundImage, backgroundDisplacementX, 0, 900, 900);
+     image(backgroundImage, 0, config.gameBarHeight, 800, 630);
      
      displayRecycleBin();
      
@@ -73,7 +74,7 @@ class Game{
      fallObjectControl(gameTime);
      
      clearFinishedObject();
-
+     
      createGameBar();
    }
    
@@ -114,8 +115,8 @@ class Game{
      recycleObjectArray = new ArrayList<RecycleObject>();
      holdingObjectArray = new ArrayList<RecycleObject>();
      
-     for(int i=0;i<config.recycleObjectImage.length;i++){
-       recycleObjectArray.add(new RecycleObject(i));
+     for(int i=0;i<config.recycleObjectImage.length / 2;i++){
+       recycleObjectArray.add(new RecycleObject(floor(random(6))));
      }
    }
    
@@ -269,7 +270,7 @@ class Game{
    void createGameBar(){
      fill(200);
      stroke(0);
-     rect(-1, 0, config.screenWidth + 2, config.gameBarHeight);
+     image(gameBarImage, 0, 0);
      
     if(mouseX > config.gameInstructionButtonX && mouseX < config.gameInstructionButtonX + config.gameInstructionButtonWidth){
       if(mouseY > config.gameInstructionButtonY && mouseY < config.gameInstructionButtonY + config.gameInstructionButtonHeight){
@@ -306,47 +307,70 @@ class Game{
    void createLevelButton() {
      stroke(0);
      if(mouseX > config.easyButtonX && mouseX < config.easyButtonX + config.easyButtonWidth){
-      if(mouseY > config.easyButtonY && mouseY < config.easyButtonY + config.easyButtonHeight){
-        fill(200);
-        rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight);
+       if(mouseY > config.easyButtonY && mouseY < config.easyButtonY + config.easyButtonHeight){
+         fill(200);
+         rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight, 4);
+         
+         mouseOverEasyButton = true;
+       }else {
+         fill(255);
+         rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight, 4);
         
-        mouseOverEasyButton = true;
-      }else {
-        fill(255);
-        rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight);
-        
-        mouseOverEasyButton = false;
-      }
-    } else {
+         mouseOverEasyButton = false;
+       }
+    }else {
       fill(255);
-      rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight);
+      rect(config.easyButtonX, config.easyButtonY, config.easyButtonWidth, config.easyButtonHeight, 4);
       
       mouseOverEasyButton = false;
     }
      
-     if(mouseX > config.hardButtonX && mouseX < config.hardButtonX + config.hardButtonWidth){
+    if(mouseX > config.hardButtonX && mouseX < config.hardButtonX + config.hardButtonWidth){
       if(mouseY > config.hardButtonY && mouseY < config.hardButtonY + config.hardButtonHeight){
         fill(200);
-        rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight);
+        rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight, 4);
         
         mouseOverHardButton = true;
       }else {
         fill(255);
-        rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight);
+        rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight, 4);
         
         mouseOverHardButton = false;
       }
-    } else {
+    }else {
       fill(255);
-      rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight);
+      rect(config.hardButtonX, config.hardButtonY, config.hardButtonWidth, config.hardButtonHeight, 4);
       
       mouseOverHardButton = false;
     }
+    
+    fill(255, 25, 125);
+    stroke(0);
+    textFont(gameTextFont,60);
+    text("Select  difficulty", config.screenWidth / 2, 150);
     
     fill(0);
     stroke(0);
     textFont(gameTextFont,24);
     text("EASY", config.easyButtonX + config.easyButtonWidth / 2, config.easyButtonY + config.hardButtonHeight / 2 + 10);
     text("HARD", config.hardButtonX + config.hardButtonWidth / 2, config.hardButtonY + config.hardButtonHeight / 2 + 10);
+   }
+   
+   Boolean checkGameOver() {
+     if(score < config.gameOverScore) return true;
+     
+     return false;
+   }
+   
+   void displayGameOver() {
+     PImage gameOverImage;
+     
+     gameOverImage = loadImage(config.gameOverImage);
+     image(gameOverImage, 0, 0, config.screenWidth, config.screenHeight);
+     
+     fill(0);
+     stroke(0);
+     textFont(gameTextFont,36);
+     text("Click to restart!", config.screenWidth / 2, 450);
    }
 }

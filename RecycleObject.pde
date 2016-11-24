@@ -7,20 +7,20 @@ class RecycleObject{
   float currentWidth;
   float currentHeight;
   
-  float startX;
-  float startY;
-  float targetX;
-  float targetY;
-  float parabolaAngle;
-  float startAnimationTime;
+  private float startX;
+  private float startY;
+  private float targetX;
+  private float targetY;
+  private float parabolaAngle;
+  private float startAnimationTime;
   
   Boolean isHit;
   Boolean isAnimationFinish;
   
   PImage objectImage;
   
-  RecycleObject(int objectType){
-    this.objectType = objectType;
+  RecycleObject(int objectTypeNumber){
+    this.objectType = objectTypeNumber % 3;
     x = 50 + random(650);
     y = 500;
     
@@ -29,7 +29,7 @@ class RecycleObject{
     isHit = false;
     isAnimationFinish = false;
     
-    objectImage = loadImage(config.recycleObjectImage[objectType]);
+    objectImage = loadImage(config.recycleObjectImage[objectTypeNumber]);
     currentWidth = objectImage.width;
     currentHeight = objectImage.height;
   }
@@ -43,7 +43,7 @@ class RecycleObject{
         y = startY - (startY - config.gameBarHeight) * sin(parabolaAngle * (gameTime - startAnimationTime) / config.recycleObjectAnimationTime) ;
       }
     }else if(isHit) {
-      x = workerX + config.workerSize * 3 / 4 + hitCount * 50;
+      x = workerX + config.workerSize * 3 / 4 + hitCount * 70;
       y = config.screenHeight - config.workerSize / 2 - currentHeight / 2;
     }
     
