@@ -214,7 +214,7 @@ class Game{
        }
      }
    }
-   
+   //clear finish recyele object and fallobject that is outside the screen
    void clearFinishedObject(){
      RecycleObject currentObject;
      FallObject currentFallObjecct;
@@ -238,7 +238,7 @@ class Game{
        
      }
    }
-   
+   //handle mouse released event
    void checkThrowLocation(float targetX, float targetY, float gameTime){
      RecycleObject currentObject;
      RecycleBin recycleBin;
@@ -255,7 +255,7 @@ class Game{
        for(int i=0; i<recycleBinArray.size(); i++) {
          recycleBin = recycleBinArray.get(i);
          
-         if(recycleBin.hitText(targetX, targetY)) {
+         if(recycleBin.hitTest(targetX, targetY)) {
            if(currentObject.objectType == recycleBin.objectType) {
              score += config.scoreRecycleBinCorrect; 
            }else {

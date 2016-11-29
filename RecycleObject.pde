@@ -48,7 +48,7 @@ class RecycleObject{
     
     image(objectImage, x, y, currentWidth, currentHeight);
   }
-  
+  //check if the object collide with worker
   Boolean hitTest(float workerX){
     if(startAnimationTime != 0) return false;
     
@@ -63,7 +63,7 @@ class RecycleObject{
    
    return false;
   }
-  
+  //set start and end point of throw animation
   void setThrowAnimation(float mouseTargetX, float mouseTargetY, float gameTime){
     startX = x;
     startY = y;

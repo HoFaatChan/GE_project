@@ -22,8 +22,8 @@ class RecycleBin{
   void display() {
     image(recycleBin, x, y, recycleBinWidth, recycleBinHeight);
   }
-  
-  Boolean hitText(float targetX, float targetY) {
+  //check the object collide with the point
+  Boolean hitTest(float targetX, float targetY) {
     if(targetX > x && targetX < x + recycleBinWidth) {
       if(targetY > y && targetY < y + recycleBinHeight) {
         return true; 

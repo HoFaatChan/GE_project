@@ -54,8 +54,8 @@ class Config{
   
   int recycleObjectAnimationTime = 1000;
   
-  int[] fallObjectCreateInterval = {900, 500};
-  float[] fallObjectSpeed = {200, 400};
+  int[] fallObjectCreateInterval = {900, 500};//{easy, hard}
+  float[] fallObjectSpeed = {200, 400};//{easy, hard}
   
   int scoreRecycleBinCorrect = 50;
   int scoreRecycleBinWrong = -100;

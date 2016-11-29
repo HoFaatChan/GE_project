@@ -35,7 +35,7 @@ class Worker{
     
     previousTime = gameTime;
   }
-  
+  //change direction to left or right
   void setDirection(char direction) {
     this.direction = direction;
   }
