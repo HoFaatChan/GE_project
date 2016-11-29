@@ -1,11 +1,14 @@
 class Instruction{
-  Config config = new Config();
   
-  PFont instructionTextFont;
+  private PFont instructionTextFont;
   Boolean mouseOverStartButton;
+  
+  PImage startButtonImage;
   
   Instruction() {
     instructionTextFont = createFont( "Arial", 32, true);
+    
+    startButtonImage = loadImage(config.startButtonImage);
     
     mouseOverStartButton = false;
   }
@@ -40,29 +43,21 @@ class Instruction{
   void createStartButton(){
     if(mouseX > config.startButtonX && mouseX < config.startButtonX + config.startButtonWidth){
       if(mouseY > config.startButtonY && mouseY < config.startButtonY + config.startButtonHeight){
-        fill(200);
-        rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight, 4);
+        tint(150);
+        image(startButtonImage, config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight);
+        tint(255);
         
         mouseOverStartButton = true;
       }else {
-        fill(255);
-        rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight, 4);
+        image(startButtonImage, config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight);
         
         mouseOverStartButton = false;
       }
     } else {
-      fill(255);
-      rect(config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight, 4);
+      image(startButtonImage, config.startButtonX, config.startButtonY, config.startButtonWidth, config.startButtonHeight);
       
       mouseOverStartButton = false;
     }
-    
-    
-    fill(66, 204, 255);
-    textFont(instructionTextFont,32);
-    
-    text("Game Start" ,config.startButtonX + config.startButtonWidth / 2, config.startButtonY + config.startButtonHeight * 2 / 3);
-    
   }
   
   void reset(){

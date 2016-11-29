@@ -1,13 +1,12 @@
 class Worker{
-  Config config = new Config();
   
   float x;
   float y;
-  float previousTime;
+  private float previousTime;
   
-  char direction;
+  private char direction;
   
-  PImage worker; 
+  private PImage worker; 
   
   Worker(){
     x = 400;

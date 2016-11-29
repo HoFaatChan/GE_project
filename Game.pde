@@ -1,7 +1,6 @@
 class Game{
   
-   Config config = new Config();
-   Worker worker;
+   private Worker worker;
    
    Boolean mouseOverIntsuctionButton;
    Boolean mouseOverEasyButton;
@@ -19,9 +18,9 @@ class Game{
    
    int gameDifficulty;
    
-   PFont gameTextFont;
-   PImage backgroundImage;
-   PImage gameBarImage;
+   private PFont gameTextFont;
+   private PImage backgroundImage;
+   private PImage gameBarImage;
    
    Game() {
      worker = new Worker();
@@ -56,10 +55,10 @@ class Game{
        createLevelButton();
        
        return;
-     }else if(checkGameOver()) {
+     }else if(checkGameFinish()) {
        createGameBar();
        
-       displayGameOver();
+       displayGameFinishMessage();
        
        return;
      }
@@ -356,21 +355,29 @@ class Game{
     text("HARD", config.hardButtonX + config.hardButtonWidth / 2, config.hardButtonY + config.hardButtonHeight / 2 + 10);
    }
    
-   Boolean checkGameOver() {
+   Boolean checkGameFinish() {
      if(score < config.gameOverScore) return true;
+     if(score > config.gameCompleteScore) return true;
      
      return false;
    }
    
-   void displayGameOver() {
-     PImage gameOverImage;
+   void displayGameFinishMessage() {
+     PImage gameFinishImage;
      
-     gameOverImage = loadImage(config.gameOverImage);
-     image(gameOverImage, 0, 0, config.screenWidth, config.screenHeight);
+     if(score < config.gameOverScore){
+       gameFinishImage = loadImage(config.gameOverImage);
+       
+       image(gameFinishImage, 0, 0, config.screenWidth, config.screenHeight);
+     }else if(score >= config.gameCompleteScore){
+       gameFinishImage = loadImage(config.gameCompleteImage);
+       
+       image(gameFinishImage, 0, 0, config.screenWidth, config.screenHeight);
+     }
      
      fill(0);
      stroke(0);
      textFont(gameTextFont,36);
-     text("Click to restart!", config.screenWidth / 2, 450);
+     text("Click to restart!", config.screenWidth / 2, 500);
    }
 }

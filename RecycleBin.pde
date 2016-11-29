@@ -1,5 +1,4 @@
 class RecycleBin{
-  Config config = new Config();
   
   int objectType;
   float x;
@@ -7,7 +6,7 @@ class RecycleBin{
   int recycleBinWidth;
   int recycleBinHeight;
   
-  PImage recycleBin; 
+  private PImage recycleBin; 
   
   RecycleBin(int objectType){
     this.objectType = objectType;

@@ -1,5 +1,4 @@
 class RecycleObject{
-  Config config = new Config();
   
   int objectType;
   float x;
@@ -17,7 +16,7 @@ class RecycleObject{
   Boolean isHit;
   Boolean isAnimationFinish;
   
-  PImage objectImage;
+  private PImage objectImage;
   
   RecycleObject(int objectTypeNumber){
     this.objectType = objectTypeNumber % 3;
@@ -65,11 +64,11 @@ class RecycleObject{
    return false;
   }
   
-  void setThrowAnimation(float targetX, float targetY, float gameTime){
+  void setThrowAnimation(float mouseTargetX, float mouseTargetY, float gameTime){
     startX = x;
     startY = y;
-    this.targetX = targetX - currentWidth / 2;
-    this.targetY = targetY + currentHeight / 2;
+    this.targetX = mouseTargetX - currentWidth / 2;
+    this.targetY = mouseTargetY + currentHeight / 2;
     
     if(targetY > config.screenHeight - config.workerSize) targetY = config.screenHeight - config.workerSize - currentHeight;
     

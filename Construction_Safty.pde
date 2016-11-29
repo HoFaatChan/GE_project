@@ -1,7 +1,8 @@
 import ddf.minim.*; 
 
 Minim Mnm;
-AudioPlayer BGM;
+AudioPlayer mainBGM;
+AudioPlayer gameBGM;
 AudioPlayer clickSound;
 
 Config config = new Config();
@@ -10,18 +11,20 @@ Main main;
 Game game;
 Instruction instruction;
 
-float startTime;
-float stopTime;
-float gameTime;
+private float startTime;
+private float stopTime;
+private float gameTime;
 
-Boolean gameStart;
-Boolean displayInstruction;
+private Boolean gameStart;
+private Boolean displayInstruction;
+private Boolean isMainBGM;
 
 void setup() {
   size(800, 600);
  
   Mnm = new Minim(this);
-  BGM = Mnm.loadFile("BGM.wav");
+  mainBGM = Mnm.loadFile("BGM.wav");
+  gameBGM = Mnm.loadFile("gameBGM.wav");
   clickSound = Mnm.loadFile("buttonSound.wav");
  
   main = new Main();
@@ -34,8 +37,9 @@ void setup() {
  
   gameStart = false;
   displayInstruction = false;
+  isMainBGM = true;
  
-  BGM.loop();
+  mainBGM.loop();
 }
 
 void draw() {
@@ -64,6 +68,8 @@ void mouseReleased() {
      
       startTime = startTime + millis() - stopTime;
       
+      if(isMainBGM) changeBGM();
+      
       clickSound.rewind();
       clickSound.play();
    }
@@ -71,7 +77,10 @@ void mouseReleased() {
     if(main.mouseOverStartButton) {
      gameStart = true;
      
-     clickSound.rewind();clickSound.play();
+     changeBGM();
+     
+     clickSound.rewind();
+     clickSound.play();
     }else if(main.mouseOverIntsuctionButton){
       displayInstruction = true;
       
@@ -87,7 +96,8 @@ void mouseReleased() {
         
         startTime = millis();
         
-        clickSound.rewind();clickSound.play();
+        clickSound.rewind();
+        clickSound.play();
       }else if(game.mouseOverHardButton) {
         game.displayDifficulty = false;
         
@@ -98,7 +108,7 @@ void mouseReleased() {
         clickSound.rewind();
         clickSound.play();
       }
-    }else if(game.checkGameOver()) {
+    }else if(game.checkGameFinish()) {
       game = new Game();
     }else if(game.mouseOverIntsuctionButton) {
       displayInstruction = true;
@@ -114,5 +124,12 @@ void mouseReleased() {
     }
   }
   
+}
+
+void changeBGM() {
+  mainBGM.close();
   
+  gameBGM.loop();
+  
+  isMainBGM = false;
 }

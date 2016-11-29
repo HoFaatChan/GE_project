@@ -7,6 +7,9 @@ class Config{
   String[] recycleBinImage = {"brown4.png", "Yellow03.png", "blue4.png"};
   String[] fallObjectImage = {"brick2.png", "steel2 .png"};
   String gameOverImage = "Game_over.png";
+  String gameCompleteImage = "mission-complete.jpg";
+  String startButtonImage = "Game start  1.png";
+  String instructionButtonImage = "how to play.png";
   
   float screenWidth = 800;
   float screenHeight = 600;
@@ -59,4 +62,5 @@ class Config{
   int scoreHitFallObject = -10;
   
   int gameOverScore = -100;
+  int gameCompleteScore = 1000;
 }

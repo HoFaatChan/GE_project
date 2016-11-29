@@ -1,18 +1,17 @@
 class FallObject{
-  Config config = new Config();
   
   int objectType;
-  float createTime;
   float x, y;
-  float startX, startY;
-  float angle;
-  float speed;
+  private float createTime;
+  private float startX, startY;
+  private float angle;
+  private float speed;
   
-  int objectWidth;
+  private int objectWidth;
   
   Boolean isHit;
   
-  PImage objectImage;
+  private PImage objectImage;
   
   FallObject(int objectType, float startX, float startY, float angle, float gameTime, float speed){
     this.objectType = objectType;
